@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,3 +26,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // Route::group(['middlewire' => 'auth'], function(){
     Route::get('tt', TestController::class)->middleware('can:dash_view')->name('tt');
 // });
+
+Route::get('chat', [ChatController::class, 'index']);
