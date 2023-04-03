@@ -11,4 +11,8 @@ class Upr extends Model
     public function upr(){
         return $this->hasMany(self::class, 'p_id', 'p_id');
     }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
