@@ -37,7 +37,4 @@ class UprController extends Controller
         return $upr;
     }
 
-    public function getPercentage()
-    {
-    }
 }

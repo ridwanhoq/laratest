@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory(100)->create();
 
         $this->call([
-            UprSeeder::class
+            UprSeeder::class,
+            UpqaOptionCountSeeder::class,
         ]);
     }
 }
