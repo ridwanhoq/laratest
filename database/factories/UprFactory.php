@@ -15,7 +15,8 @@ class UprFactory extends Factory
     {
         return [
             'user_id'   => rand(1, 100),
-            'points'    => rand(1, 500)
+            'p_id'      => rand(1, 3),
+            'points'    => rand(1, 500),
         ];
     }
 }
