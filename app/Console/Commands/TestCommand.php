@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\UprController;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -42,9 +43,11 @@ class TestCommand extends Command
 
         // return 'test';
         dd(
-            Http::get(
-                route('tt')
-            )
+            // Http::get(
+            //     route('tt')
+            // )
+
+            (new UprController())->index()
         );
     }
 }
