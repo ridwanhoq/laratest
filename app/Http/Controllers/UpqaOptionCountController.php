@@ -12,19 +12,35 @@ class UpqaOptionCountController extends Controller
     {
         $upqaOptionId = 1;
 
+        // 25/(25+20+55)*100
+
+        /**
+         * $related = Related::with(['main' => function ($query) {
+         * $query->select('id', 'selected_column');
+         * }])->withSum('main:selected_column')->get();
+         * Pques [id], PquesOption[id, pques_id], UpqaOptionCount [id, pques_option_id, total_votes, percentage]
+         * 
+         * 
+
+         */
+        $pqa_option_id = request()->pqa_option_id;
         $data = UpqaOptionCount::query()
-            ->select(DB::raw('sum(count) as sc'))
+            ->select(DB::raw('sum(total_count) as sc'))
             ->with([
-                'upqaCount' => function ($upqaCount) use ($upqaOptionId) {
-                    $upqaCount
-                    // ->selectRaw('sc/count')
-                    ->where('pqa_option_id', $upqaOptionId)
-                        // ->where('date', date('Y-m-d'))
-                        ;
+                'UpqaOptionCount' => function ($query) use ($pqa_option_id) {
+                    $query->selectRaw('sc/total_count*100 as percentage')
+                        ->where('pqa_option_id', $pqa_option_id);
                 }
             ])
             ->groupBy('pq_id')
             ->where('pq_id', 1)
+            ->get();
+
+        $data = UpqaOptionCount::with([
+            'upqaCount' => function ($query) {
+                $query->select('id');
+            }
+        ])
             ->get();
 
 

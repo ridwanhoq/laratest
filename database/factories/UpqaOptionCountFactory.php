@@ -16,7 +16,7 @@ class UpqaOptionCountFactory extends Factory
         return [
             'pq_id'         => rand(1, 3),
             'pqa_option_id' => rand(1, 3),
-            'count'         => rand(1, 500),
+            'total_count'   => rand(1, 500),
             'percentage'    => rand(0, 100)
         ];
     }
