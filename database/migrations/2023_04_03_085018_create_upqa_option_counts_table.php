@@ -19,6 +19,7 @@ class CreateUpqaOptionCountsTable extends Migration
             $table->integer('pqa_option_id')->nullable();
             $table->integer('total_count')->default(0)->min(0);
             $table->float('percentage', 8, 2)->default(0)->min(0)->max(100);
+            $table->integer('total_options')->default(1);
             $table->timestamps();
         });
     }

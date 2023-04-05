@@ -36,6 +36,14 @@ class UpqaOptionCountController extends Controller
             ->where('pq_id', 1)
             ->get();
 
+        $row = UpqaOptionCount::query()
+            ->select('percentage')
+            ->first();
+
+        $is_selected_answer_correct = $row->percentage >= 100 / $row->options_count ?: false;
+
+        // 
+
         $data = UpqaOptionCount::with([
             'upqaCount' => function ($query) {
                 $query->select('id');
