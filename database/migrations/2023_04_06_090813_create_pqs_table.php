@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePSTable extends Migration
+class CreatePqsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreatePSTable extends Migration
      */
     public function up()
     {
-        Schema::create('p_s', function (Blueprint $table) {
+        Schema::create('pqs', function (Blueprint $table) {
             $table->id();
-            $table->integer('points_per_question')->default(0);
-            $table->date('date')->default(date('Y-m-d'));
-            $table->boolean('is_active')->default(true);
+            $table->unsignedBigInteger('p_id');
+            $table->foreign('p_id')->references('id')->on('p_s');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreatePSTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('p_s');
+        Schema::dropIfExists('pqs');
     }
 }

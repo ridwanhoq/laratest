@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             UprSeeder::class,
             UpqaOptionCountSeeder::class,
             UopqaPubResSubSeeder::class,
+            PoSeeder::class,
+            
         ]);
     }
 }

@@ -14,7 +14,7 @@ class PUpdateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'p:update';
 
     /**
      * The console command description.

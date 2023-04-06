@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePSTable extends Migration
+class CreatePosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePSTable extends Migration
      */
     public function up()
     {
-        Schema::create('p_s', function (Blueprint $table) {
+        Schema::create('pos', function (Blueprint $table) {
             $table->id();
             $table->integer('points_per_question')->default(0);
             $table->date('date')->default(date('Y-m-d'));
@@ -29,6 +29,6 @@ class CreatePSTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('p_s');
+        Schema::dropIfExists('pos');
     }
 }
