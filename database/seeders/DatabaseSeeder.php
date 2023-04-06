@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UprSeeder::class,
             UpqaOptionCountSeeder::class,
+            UopqaPubResSubSeeder::class,
         ]);
     }
 }

@@ -20,7 +20,7 @@ class CreateCronJobLogsTable extends Migration
             $table->string('description')->nullable();
             $table->string('class_name')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

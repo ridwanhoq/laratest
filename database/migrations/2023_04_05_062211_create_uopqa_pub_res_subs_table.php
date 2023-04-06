@@ -17,7 +17,11 @@ class CreateUopqaPubResSubsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('pq_id')->nullable();
+            $table->integer('pqa_option_id')->nullable();
             $table->date('date')->default(date('Y-m-d'));
+            $table->unique(['user_id', 'pqa_option_id', 'date']);
+            $table->boolean('is_ans_match_with_maj_pub')->default(false);
             $table->timestamps();
         });
     }

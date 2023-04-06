@@ -4,7 +4,7 @@ namespace App\Http\Components;
 
 class Setting{
 
-    public static $chunk_size = 999;
+    public static $chunk_size = 5;//999;
 
 
 

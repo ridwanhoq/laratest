@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Components\Repositories\UopqaPubResSubUpdateRepository;
+use App\Http\Components\Repositories\UopqaPubResSubUpdateCron;
 use Illuminate\Console\Command;
 
 class UopqaPubResSubUpdateCommand extends Command
@@ -12,7 +12,7 @@ class UopqaPubResSubUpdateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'uopqa_pub_res_sub:update';
 
     /**
      * The console command description.
@@ -39,6 +39,6 @@ class UopqaPubResSubUpdateCommand extends Command
     public function handle()
     {
         // return 0;
-        (new UopqaPubResSubUpdateRepository())->index();
+        (new UopqaPubResSubUpdateCron())->index();
     }
 }

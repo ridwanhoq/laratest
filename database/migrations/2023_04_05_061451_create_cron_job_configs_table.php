@@ -15,7 +15,8 @@ class CreateCronJobConfigsTable extends Migration
     {
         Schema::create('cron_job_configs', function (Blueprint $table) {
             $table->id();
-            $table->integer('update_uopqa_pub_res')->default(0);
+            $table->date('cron_date')->default(date('Y-m-d'));
+            $table->integer('total_uopqa_pub_res_sub_rows_to_be_updated')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });

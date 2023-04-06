@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\UprController;
+use App\Models\UopqaPubResSub;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -42,12 +43,30 @@ class TestCommand extends Command
         // return 0;
 
         // return 'test';
-        dd(
-            // Http::get(
-            //     route('tt')
-            // )
+        // dd(
+        //     // Http::get(
+        //     //     route('tt')
+        //     // )
 
-            (new UprController())->index()
-        );
+        //     (new UprController())->index()
+        // );
+
+        $uopqas = UopqaPubResSub::query()
+            ->select('id', 'pqa_option_id')
+            ->where('date', date('Y-m-d'))
+            ->with([
+                'upqaOptionCount' => function ($upqaOptionCount) {
+                    $upqaOptionCount
+                    ->selectRaw('id, pqa_option_id, percentage, max(percentage) as mxp')
+                    ->where('date', date('Y-m-d'))
+                    ->groupBy('id', 'pqa_option_id', 'percentage');
+                    // ->where();
+                }
+            ])
+            ->limit(1)
+            ->get()
+            ->toArray();
+
+        dd($uopqas[0]['upqa_option_count']['percentage']);
     }
 }
