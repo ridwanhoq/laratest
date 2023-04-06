@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Components\Repositories;
+namespace App\Http\Components\Crons;
 
 use App\Http\Components\Setting;
 use App\Jobs\UopqaPubResSubUpdateJob;
@@ -15,8 +15,6 @@ class UopqaPubResSubUpdateCron
     {
 
         try {
-
-
 
             $total_to_be_updated = UopqaPubResSub::query()
                 ->where('date', date('Y-m-d'))

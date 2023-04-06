@@ -2,17 +2,19 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Components\Crons\UopqaPubResSubUpdateCron;
+use App\Models\P;
+use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
-class UopqaPubResSubUpdateCommand extends Command
+class PUpdateCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'uopqa_pub_res_sub:update';
+    protected $signature = 'command:name';
 
     /**
      * The console command description.
@@ -38,7 +40,19 @@ class UopqaPubResSubUpdateCommand extends Command
      */
     public function handle()
     {
-        // return 0;
-        (new UopqaPubResSubUpdateCron())->index();
+
+        try {
+
+            P::query()
+            ->where('date', date('Y-m-d'))
+            ->update([
+                'is_active' => true
+            ]);
+
+        } catch (Exception $error) {
+            Log::error($error);
+        }
+
+
     }
 }
