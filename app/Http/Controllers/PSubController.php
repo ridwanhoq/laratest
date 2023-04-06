@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\P;
 use App\Models\PSub;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PSubController extends Controller
@@ -40,5 +41,18 @@ class PSubController extends Controller
                 }
             ])
             ->get();
+
+
+            $auth_id = auth()->user()->id;
+
+            $user = User::find($auth_id);
+
+            if($user->las){
+                
+            }
+
+
+
+
     }
 }
