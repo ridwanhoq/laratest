@@ -9,6 +9,7 @@ use App\Models\Badge;
 use App\Models\PoSub;
 use App\Models\Upr;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class BadgeNotifyCron
@@ -20,20 +21,8 @@ class BadgeNotifyCron
     {
 
         try {
-            // PoSub = PollSubmission
-
-            $badgeByPoints = Badge::query()
-                ->selectRaw('min(necessary_rizz_points) as minPoints, min(necessary_accuracy) as minAccuracy, min(necessary_streak) as minSteak')
-                ->first();
-                
-            $query = PoSub::query()
-                ->poSubPoints($badgeByPoints->minPoints)
-                ->poSubAccuracy($badgeByPoints->minAccuracy)
-                // ->poSubStreak($badgeByPoints->minStreak)
-                ;
-
-            $countPoints = $query->count();
-            dd($countPoints);
+            // $count = ;
+            dd($count);
             $as = 1;
             $total_to_be_updated = PoSub::query()
                 ->withCount([
