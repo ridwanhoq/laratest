@@ -9,6 +9,6 @@ class Po extends Model
     use HasFactory;
 
     public function poSubs(){
-        return $this->hasMany(PSub::class, 'po_id', 'id');
+        return $this->hasMany(PoSub::class, 'po_id', 'id');
     }
 }

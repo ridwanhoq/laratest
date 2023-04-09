@@ -14,7 +14,9 @@ class PoSubFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_id'       => rand(1, 100),
+            'po_id'         => rand(1, 100),
+            'p_cat_id'      => rand(1, 100),
         ];
     }
 }

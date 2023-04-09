@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\P;
-use App\Models\PSub;
+use App\Models\PoSub;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class PSubController extends Controller
+class PoSubController extends Controller
 {
     public function index()
     {
 
-        PSub::query()
+        PoSub::query()
             ->groupBy('p_cat_id')
             ->count('p_cat_id');
 
-        PSub::query()
+        PoSub::query()
             ->groupBy('p_cat_id')
             ->avg('p_cat_id');
 
@@ -34,8 +34,8 @@ class PSubController extends Controller
 
         P::query()
             ->withCount([
-                'pSubs' => function ($pSub) {
-                    $pSub->where('p_cat_id', 1)
+                'poSubs' => function ($poSub) {
+                    $poSub->where('p_cat_id', 1)
                         ->where('date', date('Y-m-d'))
                         ->first();
                 }

@@ -10,7 +10,7 @@ class P extends Model
 
     protected $table = "p_s";
 
-    public function pSubs(){
-        return $this->hasMany(PSub::class, 'id', 'p_id');
+    public function poSubs(){
+        return $this->hasMany(PoSub::class, 'id', 'p_id');
     }
 }

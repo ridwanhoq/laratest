@@ -16,11 +16,12 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory(100)->create();
 
         $this->call([
-            UprSeeder::class,
+            // UprSeeder::class,
             UpqaOptionCountSeeder::class,
             UopqaPubResSubSeeder::class,
             PoSeeder::class,
-            
+            PoSubSeeder::class,
+            BadgeSeeder::class,
         ]);
     }
 }

@@ -2,19 +2,16 @@
 
 namespace App\Console\Commands;
 
-use App\Models\P;
-use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
-class PUpdateCommand extends Command
+class BadgeNotifyCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'p:update';
+    protected $signature = 'badge:notify';
 
     /**
      * The console command description.
@@ -40,15 +37,7 @@ class PUpdateCommand extends Command
      */
     public function handle()
     {
-
-        try {
-            P::query()
-                ->where('date', date('Y-m-d'))
-                ->update([
-                    'is_active' => true
-                ]);
-        } catch (Exception $error) {
-            Log::error($error);
-        }
+        // return 0;
+        
     }
 }

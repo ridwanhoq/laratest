@@ -20,6 +20,9 @@ class CreatePoSubsTable extends Migration
             $table->unsignedBigInteger('po_id')->nullable();
             $table->foreign('po_id')->references('id')->on('pos');
             $table->integer('p_cat_id')->nullable();
+            $table->integer('points')->default(0);
+            $table->integer('accuracy')->default(0);
+            $table->integer('streak')->default(0);
             $table->timestamps();
         });
     }

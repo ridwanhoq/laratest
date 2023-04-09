@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Components\Crons\BadgeNotifyCron;
+use App\Http\Components\Crons\BadgeUpdateCron;
 use App\Http\Controllers\UprController;
 use App\Models\P;
 use App\Models\Po;
@@ -54,17 +56,19 @@ class TestCommand extends Command
         // );
 
 
-        // dd(P::with('pSubs')->get());
+        // dd(P::with('poSubs')->get());
 
-        $test = Po::query()
-            ->withCount([
-                'poSubs' => function ($pSub) {
-                    $pSub->where('p_cat_id', 1)
-                        ->where('date', date('Y-m-d'))
-                        ->groupBy('user_id');
-                }
-            ])
-            ->get();
+        // $test = Po::query()
+        //     ->withCount([
+        //         'poSubs' => function ($poSub) {
+        //             $poSub->where('p_cat_id', 1)
+        //                 ->where('date', date('Y-m-d'))
+        //                 ->groupBy('user_id');
+        //         }
+        //     ])
+        //     ->get();
+
+        $test = (new BadgeNotifyCron())->index();
 
         dd($test);
     }
