@@ -5,10 +5,12 @@ namespace App\Console\Commands;
 use App\Http\Components\Crons\BadgeNotifyCron;
 use App\Http\Components\Crons\BadgeUpdateCron;
 use App\Http\Controllers\UprController;
+use App\Models\Badge;
 use App\Models\P;
 use App\Models\Po;
 use App\Models\UopqaPubResSub;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class TestCommand extends Command
@@ -44,32 +46,30 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        // return 0;
 
-        // return 'test';
-        // dd(
-        //     // Http::get(
-        //     //     route('tt')
-        //     // )
-
-        //     (new UprController())->index()
-        // );
+        $count = 0;
 
 
-        // dd(P::with('poSubs')->get());
+        $count = DB::select("SELECT
+        ps.user_id, b.id, psp.sumP
+    FROM
+        po_subs as ps
+        INNER JOIN (
+            SELECT
+                user_id,
+                SUM(points) as sumP
+            FROM
+                po_subs
+            GROUP BY
+                user_id
+            HAVING(sumP > 0)
+        ) as psp on psp.user_id = ps.user_id
+        INNER JOIN badges as b on sumP BETWEEN b.necessary_rizz_points_start
+        AND b.necessary_rizz_points_end
+    GROUP BY
+        ps.user_id
+        ");
 
-        // $test = Po::query()
-        //     ->withCount([
-        //         'poSubs' => function ($poSub) {
-        //             $poSub->where('p_cat_id', 1)
-        //                 ->where('date', date('Y-m-d'))
-        //                 ->groupBy('user_id');
-        //         }
-        //     ])
-        //     ->get();
-
-        $test = (new BadgeNotifyCron())->index();
-
-        dd($test);
+        dd($count);
     }
 }

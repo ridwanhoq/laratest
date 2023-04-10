@@ -21,8 +21,25 @@ class BadgeNotifyCron
     {
 
         try {
-            // $count = ;
-            dd($count);
+            $badgeByPoints = Badge::query()
+                ->selectRaw('min(necessary_rizz_points_start) as minPoints, min(necessary_accuracy_start) as minAccuracy, min(necessary_streak_start) as minSteak')
+                ->first();
+
+            $countPoints = PoSub::query()
+                ->where('points', '>=', $badgeByPoints->minPoints)
+                ->count();
+
+            $countAccuracy = PoSub::query()
+                ->where('accuracy', '>=', $badgeByPoints->minAccuracy)
+                ->count();
+
+            $countStreak = PoSub::query()
+                ->where('streak', '>=', $badgeByPoints->minStreak)
+                ->count();
+
+
+
+            dd($countPoints);
             $as = 1;
             $total_to_be_updated = PoSub::query()
                 ->withCount([

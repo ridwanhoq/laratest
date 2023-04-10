@@ -17,9 +17,12 @@ class CreateBadgesTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('badge_icon')->default('default_badge_icon.png');
-            $table->integer('necessary_rizz_points')->default(0);
-            $table->integer('necessary_accuracy')->default(0);
-            $table->integer('necessary_streak')->default(0);
+            $table->integer('necessary_rizz_points_start')->default(0);
+            $table->integer('necessary_rizz_points_end')->default(0);
+            $table->integer('necessary_accuracy_start')->default(0);
+            $table->integer('necessary_accuracy_end')->default(0);
+            $table->integer('necessary_streak_start')->default(0);
+            $table->integer('necessary_streak_end')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
