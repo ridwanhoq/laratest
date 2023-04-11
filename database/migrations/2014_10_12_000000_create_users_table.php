@@ -20,6 +20,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->date('last_poll_submitted')->nullable();
+            $table->unsignedBigInteger('last_award_id_for_points')->nullable();
+            $table->foreign('last_award_id_for_points')->references('id')->on('aws');
             $table->rememberToken();
             $table->timestamps();
         });

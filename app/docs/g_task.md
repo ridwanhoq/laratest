@@ -18,3 +18,21 @@ $percentageCounts = $counts->map(function ($count) use ($totals) {
     >> run cron on each sunday of week (if days = 7)
     >> run cron on each first day of month (if days = 30)
 >> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

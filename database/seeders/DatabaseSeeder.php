@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             PoSeeder::class,
             PoSubSeeder::class,
             BadgeSeeder::class,
+            UrSeeder::class,
+            AwSeeder::class,
         ]);
     }
 }

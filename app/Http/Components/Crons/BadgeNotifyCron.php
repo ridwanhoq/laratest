@@ -5,9 +5,11 @@ namespace App\Http\Components\Crons;
 use App\Http\Components\Setting;
 use App\Http\Components\Traits\CalendarHelperTrait;
 use App\Jobs\BadgeNotifyJob;
+use App\Models\Aw;
 use App\Models\Badge;
 use App\Models\PoSub;
 use App\Models\Upr;
+use App\Models\Ur;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -21,20 +23,23 @@ class BadgeNotifyCron
     {
 
         try {
-            $badgeByPoints = Badge::query()
+            $awByPoints = Aw::query()
                 ->selectRaw('min(necessary_rizz_points_start) as minPoints, min(necessary_accuracy_start) as minAccuracy, min(necessary_streak_start) as minSteak')
                 ->first();
 
-            $countPoints = PoSub::query()
-                ->where('points', '>=', $badgeByPoints->minPoints)
+            $countPoints = Ur::query()
+                ->where('rizz_points', '>=', $awByPoints->minPoints)
+                ->whereHas('aws', function($aws){
+                    $aws->where('is_notified', false);
+                })
                 ->count();
 
-            $countAccuracy = PoSub::query()
-                ->where('accuracy', '>=', $badgeByPoints->minAccuracy)
+            $countAccuracy = Ur::query()
+                ->where('accuracy', '>=', $awByPoints->minAccuracy)
                 ->count();
 
-            $countStreak = PoSub::query()
-                ->where('streak', '>=', $badgeByPoints->minStreak)
+            $countStreak = Ur::query()
+                ->where('streak', '>=', $awByPoints->minStreak)
                 ->count();
 
 
