@@ -9,7 +9,7 @@ class Ur extends Model
     use HasFactory;
 
     public function aws(){
-        return $this->hasMany(Aw::class)->where;
+        return $this->hasMany(Aw::class);
     }
     
 }
