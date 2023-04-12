@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Components\Crons\UawUpdateCron\UawPointsUpdateCron;
 use Illuminate\Console\Command;
 
 class UawPointsUpdateCommand extends Command
@@ -11,7 +12,7 @@ class UawPointsUpdateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'uaw-points:update';
 
     /**
      * The console command description.
@@ -37,6 +38,7 @@ class UawPointsUpdateCommand extends Command
      */
     public function handle()
     {
-        return 0;
+        // return 0;
+        (new UawPointsUpdateCron())->index();
     }
 }
