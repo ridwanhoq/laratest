@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Http\Components\Repositories\UawUpdateRepositories\UawAccuracyUpdateRepository;
+use App\Http\Components\Traits\CronJobFailLogTrait;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -9,11 +11,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UawStreakUpdateJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, CronJobFailLogTrait;
 
     private $chunkSize;
 
@@ -35,6 +38,33 @@ class UawStreakUpdateJob implements ShouldQueue
     public function handle()
     {
         try {
+            $uawStreakToBeUpdated = (new UawAccuracyUpdateRepository())
+            ->uawAccuracy()
+            ->limit($this->chunkSize)
+            ->get()
+            ->toArray();
+
+        $data = array_reduce($uawStreakToBeUpdated, function ($carry, $uawPonit) {
+            $data = [
+                'aw_id'     => $uawPonit['id'],
+                'user_id'   => $uawPonit['user_id']
+            ];
+
+            array_push($carry, $data);
+
+            return $carry;
+        }, []);
+
+        try {
+            DB::table('uaws')->upsert(
+                $data,
+                ['user_id', 'aw_id'],
+                ['user_id', 'aw_id']
+            );
+        } catch (Exception $error) {
+            $this->CronFailLogCreate($error);
+        }
+
             
         } catch (Exception $error) {
             Log::info($error);

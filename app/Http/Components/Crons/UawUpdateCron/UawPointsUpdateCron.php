@@ -28,6 +28,7 @@ class UawPointsUpdateCron
                 UawPointsUpdateJob::dispatch($chunkSize);
             }            
         } catch (Exception $error) {
+            dd($error);
             Log::info($error);
         }
 

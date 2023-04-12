@@ -38,24 +38,24 @@ class UawPointsUpdateJob implements ShouldQueue
     public function handle()
     {
         try {
-
+          
             $uawPonitsToBeUpdated = (new UawPointsUpdateRepository())
                 ->uawPoints()
                 ->limit($this->chunkSize)
                 ->get()
                 ->toArray();
 
-            $data = array_reduce($uawPonitsToBeUpdated, function ($carry, $uawPonit) {
-                $data = [
-                    'aw_id'     => $uawPonit['id'],
-                    'user_id'   => $uawPonit['user_id']
-                ];
+                $data = [];
 
-                array_push($carry, $data);
-
-                return $carry;
-            }, []);
-
+                foreach($uawPonitsToBeUpdated as $uawPonit){
+                    $data[] = [
+                        'aw_id'     => $uawPonit['id'],
+                        'user_id'   => $uawPonit['user_id']
+                    ];
+                }
+             
+       
+            dd('test');
             try {
                 DB::table('uaws')->upsert(
                     $data,
@@ -63,9 +63,11 @@ class UawPointsUpdateJob implements ShouldQueue
                     ['user_id', 'aw_id']
                 );
             } catch (Exception $error) {
-                // $this->cron
+                dd($error);
+                $this->CronFailLogCreate($error);
             }
         } catch (Exception $error) {
+            dd($error);
             Log::info($error);
         }
     }
