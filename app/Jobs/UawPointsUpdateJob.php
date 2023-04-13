@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Http\Components\Repositories\UawUpdateRepositories\UawPointsUpdateRepository;
 use App\Http\Components\Traits\CronJobFailLogTrait;
+use App\Models\User;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -38,36 +39,36 @@ class UawPointsUpdateJob implements ShouldQueue
     public function handle()
     {
         try {
-          
+
             $uawPonitsToBeUpdated = (new UawPointsUpdateRepository())
                 ->uawPoints()
                 ->limit($this->chunkSize)
                 ->get()
                 ->toArray();
+            $data = [];
+            foreach ($uawPonitsToBeUpdated as $uawPonit) {
+                $data[] = [
+                    'aw_id'     => $uawPonit->id,
+                    'user_id'   => $uawPonit->user_id
+                ];
 
-                $data = [];
-
-                foreach($uawPonitsToBeUpdated as $uawPonit){
-                    $data[] = [
-                        'aw_id'     => $uawPonit['id'],
-                        'user_id'   => $uawPonit['user_id']
-                    ];
-                }
-             
-       
-            dd('test');
+                User::find($uawPonit->user_id)->update([
+                    'last_award_id_for_points' => $uawPonit->id
+                ]);
+            }
+            
             try {
                 DB::table('uaws')->upsert(
                     $data,
                     ['user_id', 'aw_id'],
                     ['user_id', 'aw_id']
                 );
+
+                
             } catch (Exception $error) {
-                dd($error);
                 $this->CronFailLogCreate($error);
             }
         } catch (Exception $error) {
-            dd($error);
             Log::info($error);
         }
     }

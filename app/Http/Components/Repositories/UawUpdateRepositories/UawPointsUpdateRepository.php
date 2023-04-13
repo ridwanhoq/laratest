@@ -2,6 +2,7 @@
 
 namespace App\Http\Components\Repositories\UawUpdateRepositories;
 
+use App\Models\Aw;
 use Illuminate\Support\Facades\DB;
 
 class UawPointsUpdateRepository
@@ -19,10 +20,9 @@ class UawPointsUpdateRepository
                 $join->on("u.id", "=", "ur.user_id");
             })
             ->select("a.id", "ur.user_id", "a.range_start", "a.range_end")
-            ->where("ur.user_id", "=", 6)
-            ->where("a.type", "=", 1)
+            ->where("a.type", "=", Aw::$typeIdForPoints)
             ->where(function ($wh) {
-                $wh->whereNull('u.last_award_id_for_points')->orWhere('u.last_award_id_for_points', '!=', 'a.id');
+                $wh->whereNull('u.last_award_id_for_points')->orWhereColumn('u.last_award_id_for_points', '!=', 'a.id');
             });
     }
 }

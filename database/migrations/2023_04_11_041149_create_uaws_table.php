@@ -19,6 +19,7 @@ class CreateUawsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('aw_id');
             $table->foreign('aw_id')->references('id')->on('aws');
+            $table->unique(['user_id', 'aw_id']);
             $table->boolean('is_notified')->default(false);
             $table->timestamps();
         });

@@ -17,25 +17,25 @@ class AwSeeder extends Seeder
 
         $necessary_rizz_points_accuracy_streak      =
             [
+                // 'points' =>
                 [
                     [1000, 5000],
                     [5001, 15000],
                     [15001, 150000000]
                 ],
+                // 'accuracy' => 
                 [
                     [10, 40],
                     [41, 80],
                     [81, 100]
                 ],
+                // 'streak' => 
                 [
                     [1, 30],
                     [31, 100],
                     [101, 100000]
                 ]
             ];
-        $necessary_accuracy         = [[10, 40], [41, 80], [81, 100]];
-        $necessary_streak           = [[1, 30], [31, 100], [100, 100000]];
-
         $data = [];
         foreach (range(1, 3) as $key) {
             foreach (range(1, 3) as $index) {

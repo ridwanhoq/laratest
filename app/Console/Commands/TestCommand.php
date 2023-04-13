@@ -4,7 +4,9 @@ namespace App\Console\Commands;
 
 use App\Http\Components\Crons\BadgeNotifyCron;
 use App\Http\Components\Crons\BadgeUpdateCron;
+use App\Http\Components\Crons\TestCron;
 use App\Http\Components\Crons\UawUpdateCron;
+use App\Http\Components\Crons\UawUpdateCron\UawPointsUpdateCron;
 use App\Http\Controllers\UprController;
 use App\Models\Badge;
 use App\Models\P;
@@ -48,9 +50,11 @@ class TestCommand extends Command
     public function handle()
     {
 
+        dd((new TestCron())->index());
+
         $count = 0;
 
-        $count = (new UawUpdateCron())->index();
+        $count = (new UawPointsUpdateCron())->index();
 
         
 

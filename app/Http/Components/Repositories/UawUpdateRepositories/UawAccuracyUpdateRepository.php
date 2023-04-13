@@ -2,26 +2,27 @@
 
 namespace App\Http\Components\Repositories\UawUpdateRepositories;
 
+use App\Models\Aw;
 use Illuminate\Support\Facades\DB;
 
-class UawAccuracyUpdateRepository{
+class UawAccuracyUpdateRepository
+{
 
-    public function uawAccuracy(){
+    public function uawAccuracy()
+    {
         return DB::table("urs as ur")
-        ->join("aws as a", function ($join) {
-            $join->on(function ($q) {
-                $q->whereBetween('ur.accuracy', [DB::raw('a.range_start'), DB::raw('a.range_end')]);
+            ->join("aws as a", function ($join) {
+                $join->on(function ($q) {
+                    $q->whereBetween('ur.accuracy', [DB::raw('a.range_start'), DB::raw('a.range_end')]);
+                });
+            })
+            ->join("users as u", function ($join) {
+                $join->on("u.id", "=", "ur.user_id");
+            })
+            ->select("a.id", "ur.user_id", "a.range_start", "a.range_end")
+            ->where("a.type", "=", Aw::$typeIdForAccuracy)
+            ->where(function ($wh) {
+                $wh->whereNull('u.last_award_id_for_points')->orWhereColumn('u.last_award_id_for_points', '!=', 'a.id');
             });
-        })
-        ->join("users as u", function ($join) {
-            $join->on("u.id", "=", "ur.user_id");
-        })
-        ->select("a.id", "ur.user_id", "a.range_start", "a.range_end")
-        ->where("ur.user_id", "=", 6)
-        ->where("a.type", "=", 2)
-        ->where(function ($wh) {
-            $wh->whereNull('u.last_award_id_for_points')->orWhere('u.last_award_id_for_points', '!=', 'a.id');
-        });
     }
-
 }

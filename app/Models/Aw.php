@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Aw extends Model
 {
     use HasFactory;
+
+    public static $typeIdForPoints = 1;
+    public static $typeIdForAccuracy = 1;
+    public static $typeIdForStreak = 1;
 }
