@@ -29,3 +29,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // });
 
 Route::get('chat', [ChatController::class, 'index']);
+
+Route::get('/calendar/attendance', 'CalendarController@getAttendanceData');

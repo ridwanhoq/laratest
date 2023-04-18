@@ -7,6 +7,7 @@ use App\Http\Components\Crons\BadgeUpdateCron;
 use App\Http\Components\Crons\TestCron;
 use App\Http\Components\Crons\UawUpdateCron;
 use App\Http\Components\Crons\UawUpdateCron\UawPointsUpdateCron;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\UprController;
 use App\Models\Badge;
 use App\Models\P;
@@ -49,6 +50,7 @@ class TestCommand extends Command
      */
     public function handle()
     {
+        dd((new CalendarController())->getAttendanceData());
 
         dd((new TestCron())->index());
 
