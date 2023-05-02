@@ -30,7 +30,7 @@
 
                                 {!! Form::textarea('message', null, ['class' => 'form-control']) !!}
 
-
+                                {!! Form::button('Send', ['class' => 'btn btn-sm btn-success mt-2', 'id' => 'sendButton']) !!}
                                 
                             {!! Form::close() !!}
                         </div>
@@ -41,4 +41,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $('#sendButton').on('click', function(){
+            $.ajax({
+                url: '',
+                headers:{
+                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                }
+                ,
+                type: 'POST',
+                data: data,
+                success: function(res){
+
+                }
+            });
+        });
+    </script>
+    
 @endsection

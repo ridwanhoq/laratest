@@ -10,18 +10,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewTradeEvent
+class NewTradeEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    private $data;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -32,6 +34,12 @@ class NewTradeEvent
     public function broadcastOn()
     {
         // return new PrivateChannel('channel-name');
-        return new Channel('saucy-gift-149');
+        // return new Channel('saucy-gift-149');
+        // return ['saucy-gift-149'];
+        return ['my-channel'];
+    }
+
+    public function broadcastAs(){
+        return 'birthday-message';
     }
 }
