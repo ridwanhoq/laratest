@@ -15,8 +15,9 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('order_frequency')->default('');
-            $table->timestamp('expired_at')->nullable();
+            $table->string('order_frequency')->default('once')->comment('[once, daily]');
+            $table->timestamp('started_at')->default(now());
+            $table->timestamp('expired_at')->default(now());
             $table->timestamps();
         });
     }

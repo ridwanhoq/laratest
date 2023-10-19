@@ -17,8 +17,12 @@ class CreateOrderDetailsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->integer('unit_price')->default(0);
             $table->decimal('quantity', 20, 2)->default(0);
+            $table->timestamp('cron_updated_at')->nullable();
+            $table->string('cron_updated_by')->nullable();
             $table->timestamps();
         });
     }

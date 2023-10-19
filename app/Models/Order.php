@@ -12,9 +12,30 @@ class Order extends Model
     /**
      * scope functions 
      */
+
+    public function scopeOnce($query)
+    {
+        return $query->where('order_frequency', 'once');
+    }
+
+    public function scopeDaily($query)
+    {
+        return $query->where('order_frequency', 'daily');
+    }
+
     public function scopeRunning($query)
     {
-        return $query->whereNotNull('expired_at')
-            ->where('expired_at', '<', $this->getToday());
+        return $query
+            ->whereNotNull('started_at')
+            ->where('started_at', '<=', $this->getCurrentTime())
+            ->whereNotNull('expired_at')
+            ->where('expired_at', '>=', $this->getCurrentTime());
+    }
+
+    public function scopeNeedToCreateOrderDetails($query)
+    {
+        return $query
+            ->daily()
+            ->running();
     }
 }

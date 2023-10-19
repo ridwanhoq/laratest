@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class GenerateOrderDetailsForRegularCustomerCommand extends Command
+class MyTestCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'generate:regular_orders';
+    protected $signature = 'test_cmd:run';
 
     /**
      * The console command description.
@@ -38,8 +38,6 @@ class GenerateOrderDetailsForRegularCustomerCommand extends Command
     public function handle()
     {
         // return 0;
-
-        // create order details for daily customer
-        
+        dd(date('D'));
     }
 }
