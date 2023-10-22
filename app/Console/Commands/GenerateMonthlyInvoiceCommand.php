@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class GenerateMonthlyInvoiceCommand extends Command
 {
@@ -45,44 +46,86 @@ class GenerateMonthlyInvoiceCommand extends Command
     public function handle()
     {
 
+
+        // dd(
+        //     OrderDetail::query()
+        //     ->where('order_id', 1)
+        //     ->groupBy(DB::raw('DATE(created_at)'))
+        //     ->count()
+        // );
+
+        $orders = Order::query()
+        ->totalOrderDetailsOfCurrentMonth()
+        // ->daily()
+        // ->running()
+        ->invoiceIsNotCreated()
+        ->skip(0)
+        ->take(5)
+        ->get();
+        dd($orders);
+        $data = [];
+        foreach($orders as $order){
+            $data[] = 
+                [
+                    'order_id' => $order->id,
+                    'client_id' => optional($order->client)->id,
+                    'invoice_date' => $this->getLastDayOfLastMonth(),
+                    'invoice_amount' => $order->grand_total * $order->order_details_count,
+                    'paid_amount' => 0,
+                    'is_fully_paid' => false
+                ]        
+            ;
+        }
+
+        MonthlyInvoice::upsert($data, ['invoice_date', 'order_id']);
+
+        dd($data);
+
+        return;
+
         // return 0;
 
         // this command should be run on first day 00 of each month
         // count total how many order details are created
-        OrderDetail::query()
+        $totalDaysDelivered = OrderDetail::query()
             ->withinDateRange()
             ->whereHas('order', function ($order) {
                 $order
                     ->daily()
                     ->running()
                     ->invoiceIsNotCreated();
-            })->count();
+            })
+            ->groupByDate('created_at')
+            ->count();
 
-        $order = Order::query()
+        $orders = Order::query()
             ->daily()
             ->running()
             ->invoiceIsNotCreated()
-            ->first();
+            ->skip()
+            ->take()
+            ->get();
+
+            $data = [];
+            foreach($orders as $order){
+                $data[] = [
+                    [
+                        'order_id' => $order->id,
+                        'client_id' => optional($order->client)->id,
+                        'invoice_date' => $this->getLastDayOfLastMonth(),
+                        'invoice_amount' => $order->grand_total * $totalDaysDelivered,
+                        'paid_amount' => 0,
+                        'is_fully_paid' => false
+                    ]        
+                ];
+            }
+
 
         // make invoice
-        // $table->unsignedBigInteger('order_id');
-        //     $table->foreign('order_id')->references('id')->on('orders');
-        //     $table->unsignedBigInteger('client_id');
-        //     $table->foreign('client_id')->references('id')->on('clients');
-        //     $table->date('invoice_date');
-        //     $table->decimal('invoice_amount', 20, 2)->default(0);
-        //     $table->decimal('paid_amount', 20, 2)->default(0);
-
-        $data = [
-            [
-                'order_id' => $order->id,
-                'client_id' => optional($order->client)->id,
-                'invoice_amount' => $order->grand_total ?? 0,
-                'paid_amount' => 0,
-                'invoice_date' => $this->getLastDayOfLastMonth()
-            ],
-
-        ];
+        /**
+         * number of invoices should be = number active orders active in this month 
+         */
+        
         MonthlyInvoice::upsert(
             $data,
             [

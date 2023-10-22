@@ -23,6 +23,7 @@ class CreateMonthlyInvoicesTable extends Migration
             $table->decimal('invoice_amount', 20, 2)->default(0);
             $table->decimal('paid_amount', 20, 2)->default(0);
             $table->unique(['invoice_date', 'order_id']);
+            $table->boolean('is_fully_paid')->default(false);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Components\Traits\CalendarHelperTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -14,6 +15,10 @@ class Order extends Model
      */
     public function client(){
         return $this->belongsTo(Client::class);
+    }
+
+    public function orderDetails(){
+        return $this->hasMany(OrderDetail::class);
     }
 
     /**
@@ -62,5 +67,11 @@ class Order extends Model
 
     public function scopeInvoiceIsNotCreated($query){
         return $query->where('is_invoice_created', false);
+    }
+
+    public function scopeTotalOrderDetailsOfCurrentMonth($query){
+        return $query->withCount(['orderDetails' => function($orderDetails){
+            $orderDetails->withinDateRange()->groupBy(DB::raw('DATE(created_at)'));
+        }]);
     }
 }

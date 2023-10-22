@@ -22,7 +22,8 @@ class CreateOrdersTable extends Migration
             $table->timestamp('started_at')->default(now());
             $table->timestamp('expired_at')->default(now());
             $table->boolean('is_invoice_created')->default(false);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 
