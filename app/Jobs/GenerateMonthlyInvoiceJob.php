@@ -41,12 +41,9 @@ class GenerateMonthlyInvoiceJob implements ShouldQueue
         // ->daily()
         // ->running()
         ->invoiceIsNotCreated()
-        ->skip(0)
-        ->take(5)
+        ->skip($this->skip)
+        ->take($this->take)
         ->get();
-
-
-        GenerateMonthlyInvoiceJob::dispatch();
 
         // dd($orders);
         $data = [];
@@ -64,5 +61,8 @@ class GenerateMonthlyInvoiceJob implements ShouldQueue
         }
 
         MonthlyInvoice::upsert($data, ['invoice_date', 'order_id']);
+
+        
+
     }
 }

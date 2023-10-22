@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Http\Components\Traits\CalendarHelperTrait;
 use App\Jobs\GenerateMonthlyInvoiceJob;
+use App\Jobs\SendMonthlyInvoiceSmsJob;
 use App\Models\MonthlyInvoice;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -71,6 +72,11 @@ class GenerateMonthlyInvoiceCommand extends Command
             $skip = $range - 1 * $chunkSize;
 
             GenerateMonthlyInvoiceJob::dispatch(
+                $skip,
+                $chunkSize
+            );
+
+            SendMonthlyInvoiceSmsJob::dispatch(
                 $skip,
                 $chunkSize
             );

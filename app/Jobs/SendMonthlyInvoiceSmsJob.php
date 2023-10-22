@@ -13,14 +13,17 @@ class SendMonthlyInvoiceSmsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private $skip, $take;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($skip, $take)
     {
-        //
+        $this->skip = $skip;
+        $this->take = $take;
     }
 
     /**
@@ -30,6 +33,6 @@ class SendMonthlyInvoiceSmsJob implements ShouldQueue
      */
     public function handle()
     {
-        //
+        
     }
 }
