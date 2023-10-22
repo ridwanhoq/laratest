@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Components\Traits\CalendarHelperTrait;
+use App\Jobs\GenerateMonthlyInvoiceJob;
 use App\Models\MonthlyInvoice;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -54,32 +55,29 @@ class GenerateMonthlyInvoiceCommand extends Command
         //     ->count()
         // );
 
-        $orders = Order::query()
-        ->totalOrderDetailsOfCurrentMonth()
-        // ->daily()
-        // ->running()
-        ->invoiceIsNotCreated()
-        ->skip(0)
-        ->take(5)
-        ->get();
-        dd($orders);
-        $data = [];
-        foreach($orders as $order){
-            $data[] = 
-                [
-                    'order_id' => $order->id,
-                    'client_id' => optional($order->client)->id,
-                    'invoice_date' => $this->getLastDayOfLastMonth(),
-                    'invoice_amount' => $order->grand_total * $order->order_details_count,
-                    'paid_amount' => 0,
-                    'is_fully_paid' => false
-                ]        
-            ;
+        $totalOrders = Order::query()
+            ->totalOrderDetailsOfCurrentMonth()
+            // ->daily()
+            // ->running()
+            ->invoiceIsNotCreated()
+            ->skip(0)
+            ->take(5)
+            ->get();
+
+        $chunkSize = 10;
+        $loopEndLimit = ceil($totalOrders / $chunkSize);
+
+        foreach (range(1, $loopEndLimit) as $range) {
+            $skip = $range - 1 * $chunkSize;
+
+            GenerateMonthlyInvoiceJob::dispatch(
+                $skip,
+                $chunkSize
+            );
         }
 
-        MonthlyInvoice::upsert($data, ['invoice_date', 'order_id']);
 
-        dd($data);
+        dd($totalOrders);
 
         return;
 
@@ -106,26 +104,26 @@ class GenerateMonthlyInvoiceCommand extends Command
             ->take()
             ->get();
 
-            $data = [];
-            foreach($orders as $order){
-                $data[] = [
-                    [
-                        'order_id' => $order->id,
-                        'client_id' => optional($order->client)->id,
-                        'invoice_date' => $this->getLastDayOfLastMonth(),
-                        'invoice_amount' => $order->grand_total * $totalDaysDelivered,
-                        'paid_amount' => 0,
-                        'is_fully_paid' => false
-                    ]        
-                ];
-            }
+        $data = [];
+        foreach ($orders as $order) {
+            $data[] = [
+                [
+                    'order_id' => $order->id,
+                    'client_id' => optional($order->client)->id,
+                    'invoice_date' => $this->getLastDayOfLastMonth(),
+                    'invoice_amount' => $order->grand_total * $totalDaysDelivered,
+                    'paid_amount' => 0,
+                    'is_fully_paid' => false
+                ]
+            ];
+        }
 
 
         // make invoice
         /**
          * number of invoices should be = number active orders active in this month 
          */
-        
+
         MonthlyInvoice::upsert(
             $data,
             [
