@@ -21,4 +21,8 @@ trait CalendarHelperTrait{
     public function getYesterday(){
         return Carbon::yesterday()->toDateString(); 
     }
+
+    public function getLastDayOfLastMonth(){
+        return $this->carbonNow()->subMonth()->endOfMonth()->toDateString();
+    }
 }

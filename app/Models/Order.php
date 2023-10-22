@@ -10,6 +10,13 @@ class Order extends Model
     use HasFactory, CalendarHelperTrait;
 
     /**
+     * relations
+     */
+    public function client(){
+        return $this->belongsTo(Client::class);
+    }
+
+    /**
      * scope functions 
      */
 
@@ -21,6 +28,16 @@ class Order extends Model
     public function scopeDaily($query)
     {
         return $query->where('order_frequency', 'daily');
+    }
+
+    public function scopeWeekly($query)
+    {
+        return $query->where('order_frequency', 'weekly');
+    }
+
+    public function scopeMonthly($query)
+    {
+        return $query->where('order_frequency', 'monthly');
     }
 
     public function scopeRunning($query)
@@ -37,5 +54,13 @@ class Order extends Model
         return $query
             ->daily()
             ->running();
+    }
+
+    public function scopeInvoiceIsCreated($query){
+        return $query->where('is_invoice_created', true);
+    }
+
+    public function scopeInvoiceIsNotCreated($query){
+        return $query->where('is_invoice_created', false);
     }
 }
