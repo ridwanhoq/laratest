@@ -72,16 +72,10 @@ class GenerateMonthlyInvoiceJob implements ShouldQueue
                 ]); 
             }
 
-            //create send sms job 
-                $data = [
-                    'skip' => $this->skip,
-                    'take' => $this->take,
-                    'invoice_due' => $invoice_amount,
-                    'order_id' => $order->id
-                ];       
-    
+            //create send sms job     
                 SendMonthlyInvoiceSmsJob::dispatch(
-                    $data
+                    $this->skip,
+                    $this->take
                 );
     
         }

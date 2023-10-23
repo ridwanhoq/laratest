@@ -65,8 +65,13 @@ class SendMonthlyInvoiceSmsJob implements ShouldQueue
                 $sendSms = (new SendSmsService())->sendSingleSms(
                     $data
                 );
-                // 'total_due' => $total_due <= 0 ? 0 : $total_due,
 
+                if($sendSms){
+                    $order->update([
+                        'is_sms_sent' => true
+                    ]);
+                }
+                
             }
         }
 
