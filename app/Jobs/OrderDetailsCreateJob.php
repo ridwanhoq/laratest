@@ -43,8 +43,8 @@ class OrderDetailsCreateJob implements ShouldQueue
                     $order->needToCreateOrderDetails();
                 }
             )
-            // ->createdYesterday()
-            ->where('date', '2023-10-01')
+            // ->createdYesterday() //unhide it after test
+            ->where('date', '2023-10-03') // hide it after test
             ->limit($this->limit)
             ->get();
 
@@ -54,8 +54,10 @@ class OrderDetailsCreateJob implements ShouldQueue
                 'order_id' => $orderDetail->order_id,
                 'product_id' => $orderDetail->product_id,
                 'date' => Carbon::parse($orderDetail->date)->addDay(1),
-                'unit_price' => $orderDetail->unitPrice,
-                'quantity' => $orderDetail->quantity
+                'unit_price' => $orderDetail->unit_price,
+                'quantity' => $orderDetail->quantity,
+                'cron_updated_at' => $this->getCurrentTime(),
+                'cron_updated_by' => get_class($this)
             ];
         }
 

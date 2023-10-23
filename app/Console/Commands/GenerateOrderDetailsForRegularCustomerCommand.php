@@ -53,8 +53,8 @@ class GenerateOrderDetailsForRegularCustomerCommand extends Command
                     $order->needToCreateOrderDetails();
                 }
             )
-            // ->createdYesterday()
-            ->where('date', '2023-10-01')
+            // ->createdYesterday() //unhide it after test
+            ->where('date', '2023-10-01')//hide it after test
             ->count();
 
         $loopEndLimit = ceil($totalOrderDetailsToBeCreated / $chunkSize);
