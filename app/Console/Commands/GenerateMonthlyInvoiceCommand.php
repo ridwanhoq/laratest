@@ -61,9 +61,7 @@ class GenerateMonthlyInvoiceCommand extends Command
             // ->daily()
             // ->running()
             ->invoiceIsNotCreated()
-            ->skip(0)
-            ->take(5)
-            ->get();
+            ->count();
 
         $chunkSize = 10;
         $loopEndLimit = ceil($totalOrders / $chunkSize);

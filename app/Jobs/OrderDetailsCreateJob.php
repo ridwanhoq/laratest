@@ -44,7 +44,7 @@ class OrderDetailsCreateJob implements ShouldQueue
                 }
             )
             // ->createdYesterday() //unhide it after test
-            ->where('date', '2023-10-03') // hide it after test
+            ->where('date', '2023-10-04') // hide it after test
             ->limit($this->limit)
             ->get();
 
