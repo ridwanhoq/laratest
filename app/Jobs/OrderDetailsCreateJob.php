@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Http\Components\Traits\CalendarHelperTrait;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -42,7 +43,8 @@ class OrderDetailsCreateJob implements ShouldQueue
                     $order->needToCreateOrderDetails();
                 }
             )
-            ->createdYesterday()
+            // ->createdYesterday()
+            ->where('date', '2023-10-01')
             ->limit($this->limit)
             ->get();
 
@@ -51,7 +53,7 @@ class OrderDetailsCreateJob implements ShouldQueue
             $data[] = [
                 'order_id' => $orderDetail->order_id,
                 'product_id' => $orderDetail->product_id,
-                'date' => $this->getToday(),
+                'date' => Carbon::parse($orderDetail->date)->addDay(1),
                 'unit_price' => $orderDetail->unitPrice,
                 'quantity' => $orderDetail->quantity
             ];

@@ -13,24 +13,6 @@ class GenerateOrderDetailsRepository
         try {
 
 
-            $chunkSize = 10;
-
-            $totalOrderDetailsToBeCreated = OrderDetail::query()
-                ->whereHas(
-                    'order',
-                    function ($order) {
-                        $order->needToCreateOrderDetails();
-                    }
-                )
-                ->createdYesterday()
-                ->count();
-
-            $loopEndLimit = ceil($totalOrderDetailsToBeCreated / $chunkSize);
-
-            foreach(range(1, $loopEndLimit) as $range){
-                OrderDetailsCreateJob::dispatch($chunkSize);
-            }
-
         } catch (Exception $error) {
         }
     }

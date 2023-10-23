@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\OrderDetailsCreateJob;
+use App\Models\OrderDetail;
 use Illuminate\Console\Command;
 
 class GenerateOrderDetailsForRegularCustomerCommand extends Command
@@ -40,6 +42,25 @@ class GenerateOrderDetailsForRegularCustomerCommand extends Command
         // return 0;
 
         // create order details for daily customer
-        
+
+
+        $chunkSize = 10;
+
+        $totalOrderDetailsToBeCreated = OrderDetail::query()
+            ->whereHas(
+                'order',
+                function ($order) {
+                    $order->needToCreateOrderDetails();
+                }
+            )
+            // ->createdYesterday()
+            ->where('date', '2023-10-01')
+            ->count();
+
+        $loopEndLimit = ceil($totalOrderDetailsToBeCreated / $chunkSize);
+
+        foreach (range(1, $loopEndLimit) as $range) {
+            OrderDetailsCreateJob::dispatch($chunkSize);
+        }
     }
 }
