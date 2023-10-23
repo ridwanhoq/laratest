@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Http\Components\Traits\CalendarHelperTrait;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Bus\Queueable;
@@ -13,7 +14,7 @@ use Illuminate\Queue\SerializesModels;
 
 class OrderDetailsCreateJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, CalendarHelperTrait;
 
     private $limit;
 
@@ -50,12 +51,15 @@ class OrderDetailsCreateJob implements ShouldQueue
             $data[] = [
                 'order_id' => $orderDetail->order_id,
                 'product_id' => $orderDetail->product_id,
+                'date' => $this->getToday(),
                 'unit_price' => $orderDetail->unitPrice,
                 'quantity' => $orderDetail->quantity
             ];
         }
 
-        OrderDetail::insert($data);
-
+        OrderDetail::upsert(
+            $data,
+            ['date', 'order_id', 'product_id']
+        );
     }
 }
