@@ -3,14 +3,17 @@
 namespace App\Jobs;
 
 use App\Http\Components\Traits\CalendarHelperTrait;
+use App\Models\Client;
 use App\Models\MonthlyInvoice;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class GenerateMonthlyInvoiceJob implements ShouldQueue
 {
@@ -37,32 +40,52 @@ class GenerateMonthlyInvoiceJob implements ShouldQueue
     public function handle()
     {
         $orders = Order::query()
-        ->totalOrderDetailsOfCurrentMonth()
-        // ->daily()
-        // ->running()
-        ->invoiceIsNotCreated()
-        ->skip($this->skip)
-        ->take($this->take)
-        ->get();
+            ->totalOrderDetailsOfCurrentMonth()
+            // ->daily()
+            // ->running()
+            ->invoiceIsNotCreated()
+            ->skip($this->skip)
+            ->take($this->take)
+            ->get();
+
 
         // dd($orders);
-        $data = [];
-        foreach($orders as $order){
-            $data[] = 
+        $monthlyInvoiceData = [];
+        $userBalance = [];
+        foreach ($orders as $order) {
+            $invoice_amount = $order->grand_total * $order->order_details_count;
+
+            $monthlyInvoiceData[] =
                 [
                     'order_id' => $order->id,
-                    'client_id' => optional($order->client)->id,
+                    'client_id' => $order->client_id,
                     'invoice_date' => $this->getLastDayOfLastMonth(),
-                    'invoice_amount' => $order->grand_total * $order->order_details_count,
+                    'invoice_amount' => $invoice_amount,
                     'paid_amount' => 0,
                     'is_fully_paid' => false
-                ]        
-            ;
+                ];
+
+            $user = User::find($order->client->id);
+            if(!empty($user)){
+                $user->update([
+                    'balance' => DB::raw('balance') + $invoice_amount
+                ]); 
+            }
+
+            //create send sms job 
+                $data = [
+                    'skip' => $this->skip,
+                    'take' => $this->take,
+                    'invoice_due' => $invoice_amount,
+                    'order_id' => $order->id
+                ];       
+    
+                SendMonthlyInvoiceSmsJob::dispatch(
+                    $data
+                );
+    
         }
 
-        MonthlyInvoice::upsert($data, ['invoice_date', 'order_id']);
-
-        
-
+        MonthlyInvoice::upsert($monthlyInvoiceData, ['invoice_date', 'order_id']);
     }
 }

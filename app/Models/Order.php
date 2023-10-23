@@ -68,6 +68,14 @@ class Order extends Model
     public function scopeInvoiceIsNotCreated($query){
         return $query->where('is_invoice_created', false);
     }
+    
+    public function scopeInvoiceSmsSent($query){
+        return $query->where('is_invoice_sms_sent', true);
+    }
+
+    public function scopeInvoiceSmsNotSent($query){
+        return $query->where('is_invoice_sms_sent', false);
+    }
 
     public function scopeTotalOrderDetailsOfCurrentMonth($query){
         return $query->withCount(['orderDetails' => function($orderDetails){

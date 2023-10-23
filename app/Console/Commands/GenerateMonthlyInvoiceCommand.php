@@ -75,6 +75,7 @@ class GenerateMonthlyInvoiceCommand extends Command
                 $skip,
                 $chunkSize
             );
+     
 
             SendMonthlyInvoiceSmsJob::dispatch(
                 $skip,
