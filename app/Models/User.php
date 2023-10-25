@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const USER_TYPE_CLIENT = 2 ;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -41,4 +43,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * scope functions
+     */ 
+    public function scopeClient($query){
+        return $query->where('user_type', self::USER_TYPE_CLIENT);
+    }
 }
