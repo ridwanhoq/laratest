@@ -17,12 +17,13 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')->references('id')->on('clients');
-            $table->string('order_frequency')->default('once')->comment('[once, daily]');
+            $table->string('service_frequency')->default('once')->comment('[once, daily]');
             $table->decimal('grand_total', 20, 2)->default(0);
             $table->timestamp('started_at')->default(now());
             $table->timestamp('expired_at')->default(now());
             $table->boolean('is_invoice_created')->default(false);
             $table->boolean('is_invoice_sms_sent')->default(false);
+            $table->unique(['service_frequency', 'client_id', 'is_invoice_created']);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

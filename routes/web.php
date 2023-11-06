@@ -16,3 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+/**
+ * ajax
+ */
+Route::post('createOrderDetail', 'TestDeliveryController@storeOrderDetail');
+
+
+Route::get('test_delivery', 'TestDeliveryController@index');

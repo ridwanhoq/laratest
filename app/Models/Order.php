@@ -27,22 +27,22 @@ class Order extends Model
 
     public function scopeOnce($query)
     {
-        return $query->where('order_frequency', 'once');
+        return $query->where('service_frequency', 'once');
     }
 
     public function scopeDaily($query)
     {
-        return $query->where('order_frequency', 'daily');
+        return $query->where('service_frequency', 'daily');
     }
 
     public function scopeWeekly($query)
     {
-        return $query->where('order_frequency', 'weekly');
+        return $query->where('service_frequency', 'weekly');
     }
 
     public function scopeMonthly($query)
     {
-        return $query->where('order_frequency', 'monthly');
+        return $query->where('service_frequency', 'monthly');
     }
 
     public function scopeRunning($query)

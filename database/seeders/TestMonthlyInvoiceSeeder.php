@@ -29,7 +29,7 @@ class TestMonthlyInvoiceSeeder extends Seeder
         
         foreach (range(1, 2) as $range) {
             $order = Order::factory()->create([
-                'order_frequency' => 'daily',
+                'service_frequency' => 'daily',
                 'started_at' => '2023-10-01',
                 'expired_at' => '2023-10-31'
             ]);

@@ -14,11 +14,24 @@ class TestDeliveryController extends Controller
         try {
 
             $clients = Client::query()
-            ->paginate(2);
+                ->paginate(2);
 
-            return view('test_delivery.index');
+            return view(
+                'test_delivery.index',
+                compact(
+                    'clients'
+                )
+            );
         } catch (Exception $error) {
             dd($error);
+        }
+    }
+
+    public function storeOrderDetail(){
+        try {
+            
+        } catch (Exception $error) {
+            return $error;
         }
     }
 }
