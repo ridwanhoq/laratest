@@ -9,11 +9,24 @@ class OrderDetail extends Model
 {
     use HasFactory, CalendarHelperTrait;
 
-    public function order(){
+    public function order()
+    {
         return $this->belongsTo(Order::class);
     }
 
-    public function scopeCreatedYesterday($query){
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function scopeCreatedYesterday($query)
+    {
         return $query->whereDate('created_at', $this->getYesterday());
+    }
+
+    public function scopeLastOrderByOrderType($query, $orderType)
+    {
+        $date = $this->getLastOrderDateByOrderType($orderType);
+        return $query->where('date', $date);
     }
 }

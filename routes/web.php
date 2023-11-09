@@ -20,7 +20,7 @@ Route::get('/', function () {
 /**
  * ajax
  */
-Route::post('createOrderDetail', 'TestDeliveryController@storeOrderDetail');
+Route::post('createOrderDetail', 'TestDeliveryController@storeOrderDetail')->name('createOrderDetail.store');
 
 
 Route::get('test_delivery', 'TestDeliveryController@index');

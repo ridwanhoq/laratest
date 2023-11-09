@@ -16,7 +16,7 @@ class CreateClientsTable extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->decimal('balance', 10, 2);
+            $table->decimal('balance', 20, 2)->default(0);
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Client;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -14,7 +15,7 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'client_id' => rand(1, 10),
+            'client_id' => Client::factory()->create()->id,
             'grand_total' => rand(200, 400)
         ];
     }

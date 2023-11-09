@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Components\Traits\CalendarHelperTrait;
 use Illuminate\Console\Command;
 
 class MyTestCommand extends Command
 {
+    use CalendarHelperTrait;
     /**
      * The name and signature of the console command.
      *
@@ -37,6 +39,7 @@ class MyTestCommand extends Command
      */
     public function handle()
     {
+        dd($this->getDateOfLastFriday());
         // return 0;
         dd(date('D'));
     }

@@ -20,22 +20,14 @@
                 <div class="row">
                     <div class="col">
                         {!! Form::select(
-                            'product_id',
-                            $products ?? [],
-                            !isset($client) ? null : optional($client->order)->product_id ?? null,
-                            ['class' => 'form-control'],
-                        ) !!}
-                    </div>
-                    <div class="col">
-                        {!! Form::select(
                             'service_frequency',
                             $serviceFrequencies ?? [],
-                            !isset($client) ? null : optional($client->order)->service_frequency,
+                            !isset($order) ? null : $order->service_frequency,
                             ['class' => 'form-control'],
                         ) !!}
                     </div>
                     <div class="col">
-                        {!! Form::select('zone_id', $zones ?? [], !isset($client) ? null : $client->zone_id, [
+                        {!! Form::select('zone_id', $zones ?? [], !isset($order) ? null : optional($order->client)->zone_id, [
                             'class' => 'form-control',
                         ]) !!}
                     </div>
@@ -50,22 +42,20 @@
                 <thead>
                     <tr>
                         <th>Sl</th>
-                        <th>Name</th>
-                        <th></th>
+                        <th>Client</th>
+                        <th>Products</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($clients ?? [] as $key => $client)
+                    @foreach ($orders ?? [] as $key => $order)
                         <tr>
                             <td>{{ $key + 1 }}</td>
-                            <td>{{ $client->name ?? '' }}</td>
+                            <td>{{ optional($order->client)->name ?? '' }}</td>
                             <td>
+                                @foreach ($order->lastOrderDetails ?? [] as $orderDetail)
                                 <input type="checkbox" name="order_details" @click="createOrderDetail($event)"
-                                    value="{{ $client->id }}"> @{{ title }}
-                                <input type="checkbox" name="order_details" @click="createOrderDetail($event)"
-                                    value="{{ $client->id }}"> @{{ title }}
-                                <input type="checkbox" name="order_details" @click="createOrderDetail($event)"
-                                    value="{{ $client->id }}"> @{{ title }}>
+                                    value="{{ $orderDetail->id }}"> {{ $orderDetail->id }} {{ optional($orderDetail->product)->name ?? '' }}                                 
+                                @endforeach
                             </td>
                         </tr>
                     @endforeach
@@ -79,17 +69,15 @@
         const app = Vue.createApp({
             data() {
                 return {
-                    title: 'Sample'
+                    isOrderDetailChecked: false
                 }
             },
             methods: {
                 createOrderDetail(event) {
-                    ulr = '{{ route('order-details.store') }}';
+                    url = "{{ route('createOrderDetail.store') }}";
                     postData = {
-                        client_id: event.target.value,
-                        product_id: document.querySelector('select[name="product_id"]').value,
-                        service_frequency: document.querySelector('select[name="service_frequency"]').value,
-                        zone_id: document.querySelector('select[name="zone_id"]').value,
+                        orderDetailId: event.target.value,
+                        isOrderDetailChecked: event.target.checked,
                     };
 
                     axios.post(
@@ -97,8 +85,10 @@
                             postData
                         )
                         .then(
-                            reponse => {
-                                console.log(response.data);
+                            response => {
+                                if(response.data){
+                                    console.log('<' + response.data + '>');
+                                }
                             }
                         )
                         .catch(

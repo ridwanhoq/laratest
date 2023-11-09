@@ -21,6 +21,10 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class);
     }
 
+    public function lastOrderDetails(){
+        return $this->hasMany(OrderDetail::class)->latest();
+    }
+
     /**
      * scope functions 
      */

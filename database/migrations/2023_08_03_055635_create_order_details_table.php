@@ -23,6 +23,8 @@ class CreateOrderDetailsTable extends Migration
             $table->unique(['date', 'order_id', 'product_id']);
             $table->integer('unit_price')->default(0);
             $table->decimal('quantity', 20, 2)->default(0);
+            $table->decimal('additional_charge', 20, 2)->default(0);
+            $table->decimal('discount', 20, 2)->default(0);
             $table->timestamp('cron_updated_at')->nullable();
             $table->string('cron_updated_by')->nullable();
             $table->timestamp('created_at')->useCurrent();
