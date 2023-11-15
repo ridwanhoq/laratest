@@ -1,0 +1,16 @@
+{
+    "name": "ridwanhoq/simple_blog",
+    "description": "Simple blog to create post, comment and others",
+    "autoload": {
+        "psr-4": {
+            "Ridwanhoq\\SimpleBlog\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ridwanhoq",
+            "email": "riseupridwan@gmail.com"
+        }
+    ],
+    "require": {}
+}
